@@ -1,0 +1,53 @@
+.cart-items {
+  list-style: none;
+  margin: 0;
+  padding: 0 12px;
+  max-height: 20rem;
+  overflow-y: auto;
+}
+
+.total {
+  /* display: flex; */
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.actions {
+  text-align: right;
+}
+
+.actions button {
+  font: inherit;
+  cursor: pointer;
+  background-color: rgb(53, 121, 246);
+  border: 1px solid rgb(53, 121, 246);
+  padding: 0.5rem 2rem;
+  border-radius: 4px;
+  margin-left: 1rem;
+}
+
+.actions button:hover,
+.actions button:active {
+  background-color: rgb(53, 121, 246);
+  border-color: rgb(53, 121, 246);
+  color: white;
+}
+
+.actions .button--alt {
+  color: white;
+}
+
+.actions .button {
+  background-color: rgb(53, 121, 246);
+  color: white;
+}
+
+.unfoundName {
+  color: red;
+  margin: 0;
+  padding: 0;
+  display: inline;
+}

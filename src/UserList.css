@@ -1,0 +1,87 @@
+.container {
+  display: flex;
+}
+
+.navbar {
+  background-color: #f2f2f2;
+  width: 200px;
+  height: 100vh;
+  padding: 20px;
+  transition: transform 0.3s ease;
+}
+
+.navbar.closed {
+  transform: translateX(-200px);
+}
+
+.navbar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.navbar li {
+  margin-bottom: 10px;
+}
+
+.form {
+  margin-left: 20px;
+}
+
+.form input[type="text"] {
+  padding: 5px;
+  width: 200px;
+  margin-right: 10px;
+}
+
+.form button {
+  padding: 5px 10px;
+}
+
+.form input[type="text"],
+.form button {
+  border: none;
+  border-radius: 3px;
+}
+
+.toggle-btn {
+  position: absolute;
+  top: 20px;
+  right: -40px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background-color: #f2f2f2;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  outline: none;
+}
+
+.toggle-btn::before,
+.toggle-btn::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 18px;
+  height: 2px;
+  background-color: #333;
+  transform: translate(-50%, -50%);
+}
+
+.toggle-btn::before {
+  transform-origin: 0 0;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.toggle-btn::after {
+  transform-origin: 0 100%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.navbar.closed + .form .toggle-btn::before {
+  transform: translate(-50%, -50%) rotate(0);
+}
+
+.navbar.closed + .form .toggle-btn::after {
+  transform: translate(-50%, -50%) rotate(0);
+}
