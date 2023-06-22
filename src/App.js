@@ -10,7 +10,7 @@ const App = () => {
   const [user, setUser] = useState([]);
   const [leetId, setLeetId] = useState([]);
   const [cartIsShown, setCartIsShown] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
   const displayTitle = (item, titleSlug) => {
     const existingTitles = user.map((innerArray) => innerArray[0]);
     const existingSlugs = user.map((innerArray) => innerArray[1]);
@@ -30,6 +30,7 @@ const App = () => {
     const url = `${API_ENDPOINT}${username}`;
 
     try {
+      setIsLoading(true);
       const response = await fetch(url);
       const result = await response.json();
 
@@ -45,10 +46,11 @@ const App = () => {
       if (username.length > 0 && !leetId.includes(username)) {
         setLeetId((prevState) => [...prevState, username]);
       }
-
+      setIsLoading(false);
       setUsername("");
     } catch (error) {
       setCartIsShown(true);
+      setIsLoading(false);
     }
   };
 
@@ -106,6 +108,7 @@ const App = () => {
               Add Friend
             </button>
           </form>
+          {isLoading && <p>Loading data ...</p>}
           {leetId.map((item) => (
             <a href={`https://leetcode.com/${item}`} target="_blank">
               <button className="displayNameButton">{item}</button>
