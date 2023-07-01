@@ -159,12 +159,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
   background-color: #f2f2f2;
 }
 
 .leetmate {
-  font-size: 18px;
+  font-size: 80px;
   font-style: bold;
   margin-right: auto;
 }
