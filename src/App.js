@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./Components/Header";
 import ErrorMessage from "./Components/ErrorMessage";
 import NoCharacter from "./Components/NoCharacter";
@@ -14,23 +14,42 @@ const App = () => {
   const [cartIsShown, setCartIsShown] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const displayTitle = (item, titleSlug) => {
-    const existingTitles = userData.map((innerArray) => innerArray[0]);
-    const existingSlugs = userData.map((innerArray) => innerArray[1]);
-    const uniqueTitles = [...new Set([...existingTitles, ...item])];
-    const uniqueSlugs = [...new Set([...existingSlugs, ...titleSlug])];
-
-    const uniquePairs = uniqueSlugs.map((slug, index) => {
-      return [uniqueTitles[index], slug];
+  const displayTitle = (name, item, titleSlug) => {
+    setUserData((prevUserData) => {
+      const existingMap = new Map(
+        prevUserData.map(([title, slug, solvedBy, variableNames]) => [
+          slug,
+          [title, slug, solvedBy, variableNames],
+        ])
+      );
+      const newMap = new Map(
+        item.map((title, index) => {
+          const slug = titleSlug[index];
+          const existingEntry = existingMap.get(slug);
+          if (existingEntry) {
+            const [existingTitle, existingSlug, solvedBy, variableNames] =
+              existingEntry;
+            return [
+              slug,
+              [
+                existingTitle,
+                existingSlug,
+                [...solvedBy, name],
+                [...variableNames, name],
+              ],
+            ];
+          }
+          return [slug, [title, slug, [name], [name]]];
+        })
+      );
+      const mergedMap = new Map([...existingMap, ...newMap]);
+      const userDataWithNames = Array.from(mergedMap.values());
+      // console.log(userDataWithNames);
+      return userDataWithNames;
     });
-
-    setUserData(uniquePairs);
-    
   };
 
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
-
+  const fetchUserData = async (username) => {
     const url = `${API_ENDPOINT}${userName}`;
 
     try {
@@ -45,10 +64,10 @@ const App = () => {
         (submission) => submission.titleSlug
       );
 
-      displayTitle(titles, titleSlugs);
+      displayTitle(username, titles, titleSlugs);
 
-      if (userName.length > 0 && !userIds.includes(userName.toLowerCase())) {
-        setUserIds((prevState) => [...prevState, userName.toLowerCase()]);
+      if (username.length > 0 && !userIds.includes(username.toLowerCase())) {
+        setUserIds((prevState) => [...prevState, username.toLowerCase()]);
       }
       setIsLoading(false);
       setUserName("");
@@ -57,7 +76,19 @@ const App = () => {
       setCartIsShown(true);
     }
   };
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
+    fetchUserData(userName);
+  };
 
+  const deleteHandler = async (event, item) => {
+    event.preventDefault();
+    const newIds = userIds.filter((value) => value !== item);
+    setUserIds(newIds);
+    setUserData((prevUserData) =>
+      prevUserData.filter(([, , solvedBy]) => !solvedBy.includes(item))
+    );
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
     handleFormSubmit(event);
@@ -67,7 +98,6 @@ const App = () => {
     setCartIsShown(false);
     setUserName("");
   };
-
   const isSubmitDisabled = userName.trim().length === 0;
 
   return (
@@ -90,7 +120,7 @@ const App = () => {
             <button
               type="submit"
               className={`${
-                isSubmitDisabled ? "app__button_disabled" : "app__button"
+                isSubmitDisabled ? "app_button_disabled" : "app_button"
               }`}
               disabled={isSubmitDisabled}
             >
@@ -100,9 +130,18 @@ const App = () => {
           {isLoading && <p>Loading data ...</p>}
 
           {userIds.map((item) => (
-            <a href={`https://leetcode.com/${item}`} target="_blank">
-              <button className="displayNameButton">{item}</button>
-            </a>
+            <div>
+              <a href={`https://leetcode.com/${item}`} target="_blank">
+                <button className="displayNameButton">{item}</button>
+              </a>
+              <button
+                className="displayNameButtonNext"
+                onClick={(event) => deleteHandler(event, item)}
+              >
+                {" "}
+                X{" "}
+              </button>
+            </div>
           ))}
         </div>
         <div className="app__problem-list">
