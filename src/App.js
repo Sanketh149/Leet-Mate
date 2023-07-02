@@ -44,7 +44,6 @@ const App = () => {
       );
       const mergedMap = new Map([...existingMap, ...newMap]);
       const userDataWithNames = Array.from(mergedMap.values());
-      // console.log(userDataWithNames);
       return userDataWithNames;
     });
   };
@@ -120,7 +119,7 @@ const App = () => {
             <button
               type="submit"
               className={`${
-                isSubmitDisabled ? "app_button_disabled" : "app_button"
+                isSubmitDisabled ? "app__button_disabled" : "app__button"
               }`}
               disabled={isSubmitDisabled}
             >
