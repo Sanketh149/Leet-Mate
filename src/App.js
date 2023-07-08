@@ -14,6 +14,21 @@ const App = () => {
   const [cartIsShown, setCartIsShown] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    loadDataFromLocalStorage();
+  }, []);
+
+  const loadDataFromLocalStorage = () => {
+    const data = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      const value = localStorage.getItem(key);
+      data.push({ key, value: value });
+    }
+    data.map((item) => {
+      fetchUserData(item.value);
+    });
+  };
   const displayTitle = (name, item, titleSlug) => {
     setUserData((prevUserData) => {
       const existingMap = new Map(
@@ -49,7 +64,7 @@ const App = () => {
   };
 
   const fetchUserData = async (username) => {
-    const url = `${API_ENDPOINT}${userName}`;
+    const url = `${API_ENDPOINT}${username}`;
 
     try {
       setIsLoading(true);
@@ -66,7 +81,11 @@ const App = () => {
       displayTitle(username, titles, titleSlugs);
 
       if (username.length > 0 && !userIds.includes(username.toLowerCase())) {
-        setUserIds((prevState) => [...prevState, username.toLowerCase()]);
+        setUserIds((prevState) => {
+          const uniqueNames = new Set(prevState);
+          uniqueNames.add(username.toLowerCase());
+          return Array.from(uniqueNames);
+        });
       }
       setIsLoading(false);
       setUserName("");
@@ -77,6 +96,8 @@ const App = () => {
   };
   const handleFormSubmit = (event) => {
     event.preventDefault();
+    const randomKey = Math.random().toString();
+    localStorage.setItem(randomKey, userName);
     fetchUserData(userName);
   };
 
@@ -87,6 +108,14 @@ const App = () => {
     setUserData((prevUserData) =>
       prevUserData.filter(([, , solvedBy]) => !solvedBy.includes(item))
     );
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      const value = localStorage.getItem(key);
+      if (value === item) {
+        localStorage.removeItem(key);
+        break;
+      }
+    }
   };
   const handleSubmit = (event) => {
     event.preventDefault();
