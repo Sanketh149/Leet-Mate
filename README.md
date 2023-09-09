@@ -1,10 +1,39 @@
+# Leet-Mate Buddy APP 👩‍💻
+
+An App that aims to be a Hub to keep track of problems solved by peers. Created to improve consistency in my Problem-Solving.
+
+## Features and Interfaces
+
+1. Add/Delete Users:
+   - Add/Delete a valid LC user
+   - Handled invalid user names
+
+2. Hub Page
+   - Shows all the contest ratings of other peers
+   - Helps to compare and learn
+   - Pair Programming++ 😄
+  
+You can find the [Leet Hub](https://leet-hub-sanketh.vercel.app/) Page Here
+
+
+## Tech stack
+
+#### Frontend
+- HTML
+- CSS
+- React
+
+#### Backend
+- Nodejs
+- Local Storage
+- REST-API
+- Node.Js
+
+
 <img width="960" alt="image" src="https://github.com/Sanketh149/Leet-Mate/assets/89764074/9dc1b152-8a65-4bf4-8db1-4a1764a3aede">
 
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
+## Points to remember while testing the app
 
 In the project directory, you can run:
 
